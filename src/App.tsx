@@ -36,7 +36,7 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   
   return <div className="Wrapper">
     {randomURL && <div className="Background" style={{backgroundImage: `url("${randomURL}")`}}/>}
-    <div className="Content" onClick={() => getRandomImageURL()}>
+    <div className="Content" onDoubleClick={() => getRandomImageURL()}>
 
       <div className="Digit">
         <h2 className="Title">JOURS</h2>
