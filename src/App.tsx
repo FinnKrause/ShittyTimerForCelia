@@ -2,17 +2,13 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import "./App.css";
 
-interface AppProps {
-
-}
+interface AppProps {}
 
 const App:React.FC<AppProps> = ():JSX.Element => {
   const dateToCountdown = new Date("Dec 23, 2023 21:55:00").getTime();
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [randomURL, setRandomURL] = useState<string>("");
-  const [glow, setGlow] = useState<boolean>(() => {
-    return localStorage.getItem("glow") === "true"
-  });
+  const [glow, setGlow] = useState<boolean>(() => localStorage.getItem("glow") === "true");
   const [color, setColor] = useState<string>(() => {
     const lastValue = localStorage.getItem("color") || "#ffffff";
     document.documentElement.style.setProperty('--text-color', lastValue);
@@ -20,11 +16,16 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   });
   const [showControls, setShowControls] = useState<boolean>(false);
   const handle = useFullScreenHandle();
-  // const [averageColor, setAverageColor] = useState<{r:number, g: number, b: number}>({r:0, b: 0, g: 0});
 
   const getRandomImageURL = async () => {
-    const url = "BackgroundImages/Image (" + Math.floor(Math.random() * 16 + 1) + ")." + (Math.floor((Math.random()*1000)) < 0.5 ? "JPEG" : "JPG");
-    console.log(url);
+    const images:{JPEG: number, JPG: number} = {
+      "JPEG": 27,
+      "JPG": 16
+    }
+    const index = (new Date().getMinutes() % 2 == 0) ? "JPEG" : "JPG";
+
+    const url = "BackgroundImages/Image (" + Math.floor(Math.random() * images[index] + 1) + ")." + index;
+    console.log(index, url);
     setRandomURL(url);
   }
 
@@ -37,6 +38,7 @@ const App:React.FC<AppProps> = ():JSX.Element => {
     if (num <= 9) return "0"+num;
     else return num.toString();
   }
+
   useEffect(() => {
     console.log("UseEffect run!")
     setInterval(() => {
@@ -47,7 +49,8 @@ const App:React.FC<AppProps> = ():JSX.Element => {
     setInterval(() => {
       getRandomImageURL();
     }, 1000*60*60);
-    
+
+    return () => {};
   }, [dateToCountdown])
 
   return <div className="Wrapper">
@@ -58,19 +61,19 @@ const App:React.FC<AppProps> = ():JSX.Element => {
         <button className="Button GlowButton" onClick={() => OptionButtonClicked(() => {
           setGlow(!glow)
           localStorage.setItem("glow", !glow+"");
-        })}>GLOW</button>
-        <button className="Button" onClick={() => OptionButtonClicked(handle.enter)}>FULLSCREEN</button>
+        })}>BRILLER</button>
+        <button className="Button" onClick={() => OptionButtonClicked(handle.enter)}>PLEIN ÉCRAN</button>
         <input className="Button ColorInput" type="color" onChange={(e: ChangeEvent<HTMLInputElement>) => {
           setColor(e.target.value);
           localStorage.setItem("color", e.target.value);
           document.documentElement.style.setProperty('--text-color', e.target.value);
         }} value={color}></input>
+        <button className="Button ExitButton" onClick={() => setShowControls(false)}>x</button>
       </div>}
     </div>
 
     <FullScreen handle={handle}>
       {randomURL && <div className="Background" style={{backgroundImage: `url("${randomURL}")`}}/>}
-
       <div className="Content" onDoubleClick={() => getRandomImageURL()}>
         <div className="Digit">
           <h2 className="Title">JOURS</h2>
@@ -94,7 +97,6 @@ const App:React.FC<AppProps> = ():JSX.Element => {
           <h2 className="Title">SECONDES</h2>
           <h1 className={`Timer ${glow && "glow"}`} id="Seconds">{formatNumber(Math.floor((timeLeft % (1000 * 60)) / 1000))}</h1>
         </div>
-
       </div>
     </FullScreen>
   </div>
