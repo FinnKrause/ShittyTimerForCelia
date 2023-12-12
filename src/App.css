@@ -6,6 +6,8 @@
 
 html {
   --text-color: white;
+  --font-size: 5rem;
+  --secondary-font-size: 5rem;
 }
 
 .Background {
@@ -81,7 +83,7 @@ html {
 
 .Timer {
   color: var(--text-color);
-  font-size: 5rem;
+  font-size: var(--font-size);
   font-weight: bold;
   font-family: 'Golos Text', sans-serif; 
   margin: 0px 5px;
@@ -102,6 +104,7 @@ html {
 
 .Title {
   color: white;
+  font-size: calc(var(--font-size) / 5);
   font-family: 'Golos Text', sans-serif; 
 }
 
