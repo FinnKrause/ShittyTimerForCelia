@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import bänaudio from "./assets/Bän.wav";
 import "./App.css";
 import useRedundantStorage from "./Hooks/useRedudantStorage";
 
@@ -46,7 +47,36 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   }
 
   const updateTimerInterval = () => {
-    setTimeLeft(dateToCountdown - new Date().getTime());
+    const timeLeft = dateToCountdown - new Date().getTime();
+    setTimeLeft(timeLeft);
+
+    const hour = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    const min = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    const sec = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+    if (hour == 0 && min == 0 && sec == 0) {
+      console.log("BÄN ALARM")
+      let _counter = 0;
+      const _interval = setInterval(() => {
+        playSound();
+        if (_counter >= 10) clearInterval(_interval);
+        _counter++;
+      }, 300)
+    }
+    else if (min == 0 && sec == 0) {
+      playSound();
+    }
+  }
+
+  function playSound() {
+    const ourAudio = document.createElement('audio'); 
+    ourAudio.style.display = "none"; 
+    ourAudio.src = bänaudio; 
+    ourAudio.autoplay = true;
+    ourAudio.onended = function() {
+      ourAudio.remove(); 
+    };
+    document.body.appendChild(ourAudio);
   }
 
   useEffect(() => {
