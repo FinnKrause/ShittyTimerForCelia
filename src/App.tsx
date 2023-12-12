@@ -9,7 +9,6 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   const dateToCountdown = new Date("Dec 23, 2023 21:55:00").getTime();
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [randomURL, setRandomURL] = useState<string>("");
-  // const [glow, setGlow] = useState<boolean>(() => localStorage.getItem("glow") === "true");
   const [glow, setGlow] = useRedundantStorage<string>("glow", "false");
   const [color, setColor] = useRedundantStorage<string>("text-color", "#ffffff", true);
   const [fontSize, setFontSize] = useRedundantStorage<number>("font-size", 5, true, "rem");
