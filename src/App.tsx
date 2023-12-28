@@ -7,7 +7,7 @@ import useRedundantStorage from "./Hooks/useRedudantStorage";
 interface AppProps {}
 
 const App:React.FC<AppProps> = ():JSX.Element => {
-  const dateToCountdown = new Date("Dec 23, 2023 21:55:00").getTime();
+  const dateToCountdown = new Date("Feb 25, 2024 16:50:00").getTime();
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [randomURL, setRandomURL] = useState<string>("");
   const [glow, setGlow] = useRedundantStorage<string>("glow", "false");
@@ -89,14 +89,6 @@ const App:React.FC<AppProps> = ():JSX.Element => {
 
     return () => {};
   }, [])
-
-  // useEffect(() => {
-  //   document.documentElement.style.setProperty('--font-size', fontSize.toString()+"rem");
-  // }, [fontSize])
-
-  // useEffect(() => {
-  //   document.documentElement.style.setProperty('--text-color', color);
-  // }, [color])
 
   return <div className="Wrapper">
     
