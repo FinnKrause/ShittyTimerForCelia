@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@500&display=swap');
+
+* {
+  user-select: none;
+}
+
+html {
+  --text-color: white;
+  --font-size: 5rem;
+  --secondary-font-size: 5rem;
+}
+
+.Background {
+  min-height: 100vh;
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.Background::after {
+  content: '';
+  min-height: 100vh;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  backdrop-filter: blur(10px) brightness(.5);
+}
+
+.Content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-height: 100vh;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  place-items: center;
+}
+
+.Controls {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+}
+
+.Button {
+  backdrop-filter: blur(10px);
+  background-color: hsla(0,0%,100%,.2);;
+  color: white;
+  font-weight: bold;
+  padding: 15px 30px;
+  border-radius: 5px;
+  border: none;
+  margin: 20px;
+}
+
+.ShowControlsButton {
+  padding: 5px;
+  border-radius: 50%;
+  margin: 5px;
+}
+
+.ExitButton {
+  border-radius: 50%;
+  padding: 0;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  vertical-align: center;
+  background-color: var(--text-color);
+  color: black;
+  font-weight: bold;
+  text-shadow: 0 0 2.5px #fff, 0 0 5px #fff, 0 0 10.5px #fff, 0 0 20.5px ;
+}
+
+.ColorInput {
+  padding: 5px;
+}
+
+.Timer {
+  color: var(--text-color);
+  font-size: var(--font-size);
+  font-weight: bold;
+  font-family: 'Golos Text', sans-serif; 
+  margin: 0px 5px;
+}
+
+.glow {
+  text-shadow: 0 0 2.5px var(--text-color), 0 0 5px var(--text-color), 0 0 10.5px var(--text-color), 0 0 20.5px ;
+	color: var(--text-color);
+	text-align: center;	  	
+}
+
+.Digit {
+  display: flex;
+  justify-content: center;
+  place-items: center;
+  flex-direction: column;
+}
+
+.Title {
+  color: white;
+  font-size: calc(var(--font-size) / 5);
+  font-family: 'Golos Text', sans-serif; 
+}
+
+@media all and (max-width: 580px) {
+  .Digit {
+    flex-direction: column-reverse;
+    margin: 20px 0px;
+  }
+  .Content {
+    flex-direction: column;
+  }
+  .Colon {
+    display: none;
+  }
+}
