@@ -3,6 +3,7 @@ import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import bänaudio from "./assets/Bän.wav";
 import "./App.css";
 import useRedundantStorage from "./Hooks/useRedudantStorage";
+import LiveStatus from "./components/LiveStatus";
 
 interface AppProps {}
 
@@ -106,8 +107,12 @@ const App:React.FC<AppProps> = ():JSX.Element => {
         <input type="range" min={1} max={8} value={fontSize} onChange={(e: ChangeEvent<HTMLInputElement>) => {
           setFontSize(+e.target.value)
         }}></input>
-        <button className="Button ExitButton" onClick={() => setShowControls(false)}>x</button>
+        <button className="Button ExitButton" onClick={()=>setShowControls(false)}>x</button>
       </div>}
+    </div>
+ 
+    <div className="LiveStatusWrapper">
+      <LiveStatus></LiveStatus>
     </div>
 
     <FullScreen handle={handle}>

@@ -108,6 +108,13 @@ html {
   font-family: 'Golos Text', sans-serif; 
 }
 
+.LiveStatusWrapper {
+  position: absolute;
+  z-index: 10;
+  bottom: 0;
+  left: 0;
+}
+
 @media all and (max-width: 580px) {
   .Digit {
     flex-direction: column-reverse;
