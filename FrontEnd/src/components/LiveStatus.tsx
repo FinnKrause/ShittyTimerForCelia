@@ -1,38 +1,62 @@
 import "../LiveStatus.css";
-import {useEffect, useRef} from "react";
+import {useEffect, useState} from "react";
+import {France, Germany} from "./SVGs";
+import {JSTimeToString} from "../math/TimeCalc"
 
 interface LiveStatusProps {
-
+    showInfo: boolean;
 }
 
-const LiveStatus:React.FC<LiveStatusProps> = ():JSX.Element => {
+interface Client {
+    name: string;
+    country: "France" | "Germany" | undefined;
+}
 
-    const connection = useRef<WebSocket>()
+interface OnlineClient extends Client {
+    connectedSince: number;
+    currentPicture?: string;
+}
+
+// interface OfflineClient extends Client {
+//     lastConnected: number;
+// }
+
+const LiveStatus:React.FC<LiveStatusProps> = (Props):JSX.Element => {
+
+    const [onlineClients, setOnlineClients] = useState<OnlineClient[]>();
+    // const [offineClientHistory, setOfflineClientHistory] = useState<OfflineClient[]>();
 
     useEffect(() => {
-      const socket = new WebSocket("ws://localhost:6971/")
-  
-      // Connection opened
-      socket.addEventListener("open", () => {
-        socket.send("Connection established")
-      })
-  
-      // Listen for messages
-      socket.addEventListener("message", (event) => {
-        console.log("Message from server ", event.data)
-      })
-  
-      connection.current = socket
-  
-      return () => {
-        if (connection?.close != undefined) 
-            connection.close();
-      }
-    }, [])
+        const ws = new WebSocket("wss://celiaapi.finnkrause.com/")
+        ws.onmessage = (event) => {
+          const data = JSON.parse(event.data);
+          if (data.type === 'onlineClients') 
+            setOnlineClients(data.data)
+          else console.log('Unknown data received:', data);
+        };
+        return () => ws.close()
+      }, []);
     
     
-    return <div>
-        <h1>Hello world</h1>
+    return <div className="LiveStatus">
+        {Props.showInfo && onlineClients?.map((i, idx) => <OnlineClientVRepresentation data={i} key={idx}></OnlineClientVRepresentation>)}
+    </div>
+}
+
+interface OnlineClientVRepresentationProps {
+    data: OnlineClient
+}
+
+const OnlineClientVRepresentation:React.FC<OnlineClientVRepresentationProps> = (Props):JSX.Element => {
+    return <div className="OnlineClientVRepresentation">
+        <div className="ClientLeftSide">
+            <div className="ClientGreenBall"></div>
+            <div className="ClientName">{Props.data.name}</div>
+        </div>
+        <div className="ClientRightSide">
+            <div className="ClientDuration">{JSTimeToString(new Date().getTime() - Props.data.connectedSince)}</div>
+            <div className="ClientCountry">{Props.data.country === "France" ? France : Germany}</div>
+        </div>
     </div>
 }
 

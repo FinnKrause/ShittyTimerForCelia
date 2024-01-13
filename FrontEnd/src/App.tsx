@@ -14,6 +14,7 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   const [glow, setGlow] = useRedundantStorage<string>("glow", "false");
   const [color, setColor] = useRedundantStorage<string>("text-color", "#ffffff", true);
   const [fontSize, setFontSize] = useRedundantStorage<number>("font-size", 5, true, "rem");
+  const [showDeviceInfo, setShowDeviceInfo] = useRedundantStorage<string>("showDeviceInfo", "false");
   const [showControls, setShowControls] = useState<boolean>(false);
   const handle = useFullScreenHandle();
 
@@ -107,15 +108,16 @@ const App:React.FC<AppProps> = ():JSX.Element => {
         <input type="range" min={1} max={8} value={fontSize} onChange={(e: ChangeEvent<HTMLInputElement>) => {
           setFontSize(+e.target.value)
         }}></input>
+        <button className="Button" onClick={() => OptionButtonClicked(() => setShowDeviceInfo(showDeviceInfo=="true"?"false":"true"))}>Appareils</button>
         <button className="Button ExitButton" onClick={()=>setShowControls(false)}>x</button>
       </div>}
     </div>
  
-    <div className="LiveStatusWrapper">
-      <LiveStatus></LiveStatus>
-    </div>
 
     <FullScreen handle={handle}>
+      <div className="LiveStatusWrapper">
+        <LiveStatus showInfo={showDeviceInfo === "true"}></LiveStatus>
+      </div>
       {randomURL && <div className="Background" style={{backgroundImage: `url("${randomURL}")`}}/>}
       <div className="Content" onDoubleClick={() => getRandomImageURL()}>
         <div className="Digit">

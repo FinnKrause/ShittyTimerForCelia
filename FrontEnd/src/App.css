@@ -110,9 +110,10 @@ html {
 
 .LiveStatusWrapper {
   position: absolute;
+  color: white;
   z-index: 10;
-  bottom: 0;
-  left: 0;
+  bottom: 10px;
+  left: 10px;
 }
 
 @media all and (max-width: 580px) {
