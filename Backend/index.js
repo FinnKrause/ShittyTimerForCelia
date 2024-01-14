@@ -22,26 +22,51 @@ wss.on("connection", (ws, req) => {
   const startTime = new Date().getTime();
 
   let country;
-  fetch(`http://ip-api.com/json/${ws._socket.remoteAddress}`)
-    .then((res) => res.json())
-    .then((data) => {
-      if (!data) return;
-      country = data["country"] === "France" ? "France" : "Germany";
+  ws.send(
+    reply(
+      "Identification",
+      { clientId: clientId },
+      false,
+      "Please identify yourself with IP-Adress and Country!"
+    )
+  );
+
+  logMessage(
+    `Client "${userAgendString(deviceDetector.parse(userAgent))}" connected.`
+  );
+
+  currentClients.set(clientId, {
+    connectedSince: startTime,
+    country: country,
+    clientId,
+    name: userAgendString(deviceDetector.parse(userAgent)),
+  });
+  ws.send(reply("other", null, false, "You Are Connected"));
+  wss.broadcast(Array.from(currentClients.values()));
+
+  ws.on("message", (data, isBinary) => {
+    if (isBinary) data = data.toString();
+    data = JSON.parse(data);
+    if (data.type === "Identification") {
+      let old = currentClients.get(clientId);
+      old.country = data.data.country;
+      if (data.data.name != undefined) old.name = data.data.name;
+      currentClients.set(data.data.clientId, old);
 
       logMessage(
         `Client "${userAgendString(
           deviceDetector.parse(userAgent)
-        )}" from "${country}" connected.`
+        )}" location sucessfully updated to "${data.data.country}".`
       );
-
-      currentClients.set(clientId, {
-        connectedSince: startTime,
-        country: country,
-        name: userAgendString(deviceDetector.parse(userAgent)),
-      });
-      ws.send(reply("other", null, false, "You Are Connected"));
       wss.broadcast(Array.from(currentClients.values()));
-    });
+    } else if (data.type === "Update") {
+      let old = currentClients.get(clientId);
+      old.name = data.data.name;
+      currentClients.set(clientId, old);
+      console.log("Updating name from " + clientId + " to " + data.data.name);
+      wss.broadcast(Array.from(currentClients.values()));
+    }
+  });
 
   ws.on("close", () => {
     const duration = new Date().getTime() - startTime;
