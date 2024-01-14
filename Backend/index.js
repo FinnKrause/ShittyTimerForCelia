@@ -21,6 +21,10 @@ wss.on("connection", (ws, req) => {
   const userAgent = req.headers["user-agent"];
   const startTime = new Date().getTime();
 
+  const updateInterval = setInterval(() => {
+    ws.send(reply("ping", null, false, "Alive?"));
+  }, 5500);
+
   let country;
   ws.send(
     reply(
@@ -78,6 +82,8 @@ wss.on("connection", (ws, req) => {
         deviceDetector.parse(userAgent)
       )}" from "${country}" disconnected. Duration: ${duration / 1000}s`
     );
+
+    clearInterval(updateInterval);
   });
 });
 
