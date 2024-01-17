@@ -21,6 +21,15 @@
     background-color: hsla(0,0%,100%,.3) !important;
 }
 
+.Offline {
+    background-color: hsla(0,0%,100%,0.05) !important;
+}
+
+.Offline div {
+    color: grey;
+    filter: saturate(60%);
+}
+
 .ClientLeftSide {
     display: flex;
     align-items: center;
@@ -45,13 +54,14 @@
 }
 
 .ClientDuration {
-    margin-right: 10px;
+    margin-right: 5px;
     font-size: 12px;
     font-family: 'Golos Text', sans-serif; 
     color: white;
 }
 
 .ClientCountry {
+    margin-left: 5px;
     transform: translateY(1px);
     /* filter: contrast(70%); */
 }
@@ -64,6 +74,15 @@
     margin-right: 10px;
 
     animation: Pulse 2s infinite linear;
+}
+
+.ClientRedBall {
+    background-color: red;
+    opacity: 50%;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
 }
 
 @keyframes Pulse {

@@ -25,3 +25,14 @@ export function JSTimeToString(millis: number): string {
   if (seconds > 0 || minutes > 0) res.push(`${seconds}s`);
   return res.join(" ");
 }
+
+export function JSTimeToStringRoughEstimate(millis: number): string {
+  const { days, hours, minutes } = JSTimeToReadable(millis);
+  const res: string[] = [];
+
+  if (days > 0) res.push(days + "d");
+  if (hours > 0 || days > 0) res.push(`${hours}h`);
+  else if (minutes == 0 && hours == 0 && days == 0) res.push("<1m");
+  else if (hours == 0 && days == 0) res.push(`<1h`);
+  return res.join(" ");
+}

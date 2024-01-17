@@ -7,11 +7,11 @@ const deviceDetector = new DeviceDetector();
 var wss = new WebSocketServer({ port: 6971 });
 
 let currentClients = new Map(); //OnlineClient
-let clientHistory; //OfflineClient[]
+let clientHistory = new Map(); //OfflineClient[]
 
-wss.broadcast = function (d) {
+wss.broadcast = function (type, d) {
   wss.clients.forEach((client) => {
-    const datathatcameback = reply("onlineClients", d, false, null);
+    const datathatcameback = reply(type, d, false, null);
     client.send(datathatcameback);
   });
 };
@@ -23,13 +23,18 @@ wss.on("connection", (ws, req) => {
 
   const updateInterval = setInterval(() => {
     ws.send(reply("ping", null, false, "Alive?"));
-  }, 5500);
+  }, 30000);
 
   let country;
+  let customName;
+  ws.send(
+    reply("offlineClients", Array.from(clientHistory.values()), false, null)
+  );
+
   ws.send(
     reply(
       "Identification",
-      { clientId: clientId },
+      { clientId },
       false,
       "Please identify yourself with IP-Adress and Country!"
     )
@@ -45,50 +50,72 @@ wss.on("connection", (ws, req) => {
     clientId,
     name: userAgendString(deviceDetector.parse(userAgent)),
   });
-  ws.send(reply("other", null, false, "You Are Connected"));
-  wss.broadcast(Array.from(currentClients.values()));
+  broadcastOnlineClients();
 
   ws.on("message", (data, isBinary) => {
     if (isBinary) data = data.toString();
     data = JSON.parse(data);
     if (data.type === "Identification") {
-      let old = currentClients.get(clientId);
+      let old = { ...currentClients.get(clientId) };
       old.country = data.data.country;
-      if (data.data.name != undefined) old.name = data.data.name;
-      currentClients.set(data.data.clientId, old);
+      country = data.data.country;
+      if (data.data.name) {
+        old.name = data.data.name;
+        customName = data.data.name;
+      }
+      currentClients.set(clientId, old);
+
+      if (clientHistory.has(data.data.country))
+        clientHistory.delete(data.data.country);
+      broadcastOfflineClients();
 
       logMessage(
-        `Client "${userAgendString(
-          deviceDetector.parse(userAgent)
-        )}" location sucessfully updated to "${data.data.country}".`
+        `Client "${old.name}" location sucessfully updated to "${data.data.country}".`
       );
-      wss.broadcast(Array.from(currentClients.values()));
+      broadcastOnlineClients();
     } else if (data.type === "Update") {
       let old = currentClients.get(clientId);
       old.name = data.data.name;
+      customName = data.data.name;
       currentClients.set(clientId, old);
       console.log("Updating name from " + clientId + " to " + data.data.name);
-      wss.broadcast(Array.from(currentClients.values()));
+      broadcastOnlineClients();
     }
   });
 
   ws.on("close", () => {
     const duration = new Date().getTime() - startTime;
+    const _offlineClient = { ...currentClients.get(clientId) };
     currentClients.delete(clientId);
-    wss.broadcast(Array.from(currentClients.values()));
+    broadcastOnlineClients();
+    clearInterval(updateInterval);
+    if (duration < 3000) return;
+
+    _offlineClient["connectedLast"] = new Date().getTime();
+    _offlineClient["duration"] = duration;
+    delete _offlineClient.connectedSince;
+
+    clientHistory.set(_offlineClient.country, _offlineClient);
+    broadcastOfflineClients();
 
     logMessage(
-      `Client "${userAgendString(
-        deviceDetector.parse(userAgent)
-      )}" from "${country}" disconnected. Duration: ${duration / 1000}s`
+      `Client "${customName}" from "${country}" disconnected. Duration: ${
+        duration / 1000
+      }s`
     );
-
-    clearInterval(updateInterval);
   });
 });
 
 function userAgendString(userAgend) {
   return `${userAgend.os.name}, ${userAgend.device.type}`;
+}
+
+function broadcastOnlineClients() {
+  wss.broadcast("onlineClients", Array.from(currentClients.values()));
+}
+
+function broadcastOfflineClients() {
+  wss.broadcast("offlineClients", Array.from(clientHistory.values()) || null);
 }
 
 function logMessage(message) {
