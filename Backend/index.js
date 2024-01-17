@@ -65,13 +65,13 @@ wss.on("connection", (ws, req) => {
       }
       currentClients.set(clientId, old);
 
-      if (clientHistory.has(data.data.country))
-        clientHistory.delete(data.data.country);
-      broadcastOfflineClients();
+      // if (clientHistory.has(data.data.country))
+      //   clientHistory.delete(data.data.country);
 
       logMessage(
         `Client "${old.name}" location sucessfully updated to "${data.data.country}".`
       );
+      broadcastOfflineClients();
       broadcastOnlineClients();
     } else if (data.type === "Update") {
       let old = currentClients.get(clientId);
