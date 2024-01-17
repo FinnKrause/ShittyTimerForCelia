@@ -8,6 +8,7 @@ html {
   --text-color: white;
   --font-size: 5rem;
   --secondary-font-size: 5rem;
+  --blur-amount: 10px;
 }
 
 .Background {
@@ -25,7 +26,7 @@ html {
   position: absolute;
   top: 0;
   left: 0;
-  backdrop-filter: blur(10px) brightness(.5);
+  backdrop-filter: blur(var(--blur-amount)) brightness(.5);
 }
 
 .Content {

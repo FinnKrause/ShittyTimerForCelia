@@ -13,6 +13,7 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   const [randomURL, setRandomURL] = useState<string>("");
   const [glow, setGlow] = useRedundantStorage<string>("glow", "false");
   const [color, setColor] = useRedundantStorage<string>("text-color", "#ffffff", true);
+  const [blurAmount, setBlurAmount] = useRedundantStorage<number>("blur-amount", 10, true, "px");
   const [fontSize, setFontSize] = useRedundantStorage<number>("font-size", 5, true, "rem");
   const [showDeviceInfo, setShowDeviceInfo] = useRedundantStorage<string>("showDeviceInfo", "false");
   const [showControls, setShowControls] = useState<boolean>(false);
@@ -107,6 +108,9 @@ const App:React.FC<AppProps> = ():JSX.Element => {
         }} value={color}></input>
         <input type="range" min={1} max={8} value={fontSize} onChange={(e: ChangeEvent<HTMLInputElement>) => {
           setFontSize(+e.target.value)
+        }}></input>
+        <input type="range" min={0} max={60} value={blurAmount} onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          setBlurAmount(+e.target.value)
         }}></input>
         <button className="Button" onClick={() => OptionButtonClicked(() => setShowDeviceInfo(showDeviceInfo=="true"?"false":"true"))}>Appareils</button>
         <button className="Button ExitButton" onClick={()=>setShowControls(false)}>x</button>
