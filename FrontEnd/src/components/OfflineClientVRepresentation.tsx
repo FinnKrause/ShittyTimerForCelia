@@ -13,10 +13,10 @@ const OfflineClientVRepresentation:React.FC<OfflineClientVRepresentationProps> =
             <div className="ClientName">{Props.data.name}</div>
         </div>
         <div className="ClientRightSide">
-            <div className="ClientDuration">{JSTimeToString(Props.data.duration)} vor </div>
+            <div className="ClientDuration">{JSTimeToString(Props.data.duration)} il y a </div>
             <div className="ClientDuration">{JSTimeToStringRoughEstimate(new Date().getTime() - Props.data.connectedLast)}</div>
-            <div className="ClientCountry">{Props.data.country === "France" && France}</div>
-            <div className="ClientCountry">{Props.data.country === "Germany" && Germany}</div>
+            {Props.data.country==="France" && <div className="ClientCountry">{Props.data.country === "France" && France}</div>}
+            {Props.data.country==="Germany" && <div className="ClientCountry">{Props.data.country === "Germany" && Germany}</div>}
         </div>
     </div>
 }

@@ -19,8 +19,8 @@ const OnlineClientVRepresentation:React.FC<OnlineClientVRepresentationProps> = (
         </div>
         <div className="ClientRightSide">
             <div className="ClientDuration">{JSTimeToString(new Date().getTime() - Props.data.connectedSince)}</div>
-            <div className="ClientCountry">{Props.data.country === "France" && France}</div>
-            <div className="ClientCountry">{Props.data.country === "Germany" && Germany}</div>
+           { <div className="ClientCountry">{Props.data.country === "France" && France}</div>}
+           { <div className="ClientCountry">{Props.data.country === "Germany" && Germany}</div>}
         </div>
     </div>
 }

@@ -96,24 +96,27 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   return <div className="Wrapper">
     
     <div className="Controls">
-      {!showControls && <button className="Button ShowControlsButton" onClick={() => setShowControls(true)}></button>}
-      {showControls && <div>
-        <button className="Button GlowButton" onClick={() => OptionButtonClicked(() => setGlow(glow=="true"?"false":"true"))}>BRILLER</button>
-
-        <button className="Button" onClick={() => OptionButtonClicked(handle.enter)}>PLEIN ÉCRAN</button>
-        <input className="Button ColorInput" type="color" onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          setColor(e.target.value);
-          localStorage.setItem("color", e.target.value);
-          document.documentElement.style.setProperty('--text-color', e.target.value);
-        }} value={color}></input>
-        <input type="range" min={1} max={8} value={fontSize} onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          setFontSize(+e.target.value)
-        }}></input>
-        <input type="range" min={0} max={60} value={blurAmount} onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          setBlurAmount(+e.target.value)
-        }}></input>
-        <button className="Button" onClick={() => OptionButtonClicked(() => setShowDeviceInfo(showDeviceInfo=="true"?"false":"true"))}>Appareils</button>
-        <button className="Button ExitButton" onClick={()=>setShowControls(false)}>x</button>
+      {!showControls && <button className="ShowControlsButton" onClick={() => setShowControls(true)}></button>}
+      {showControls && <div className="ControlsRelative">
+        <div className="row">
+          <button className={`Button GlowButton${glow=="true"?" ToggleActive": ""}`} onClick={() => OptionButtonClicked(() => setGlow(glow=="true"?"false":"true"))}>BRILLER</button>
+          <button className="Button" onClick={() => OptionButtonClicked(handle.enter)}>PLEIN ÉCRAN</button>
+          <button className={`Button${showDeviceInfo=="true"?" ToggleActive": ""}`} onClick={() => OptionButtonClicked(() => setShowDeviceInfo(showDeviceInfo=="true"?"false":"true"))}>APPAREILS</button>
+        </div>
+        <div className="row">
+          <input className="Button ColorInput" type="color" onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setColor(e.target.value);
+            localStorage.setItem("color", e.target.value);
+            document.documentElement.style.setProperty('--text-color', e.target.value);
+          }} value={color}></input>
+          <input className="Slider" type="range" min={1} max={8} value={fontSize} onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setFontSize(+e.target.value)
+          }}></input>
+          <input className="Slider" type="range" min={0} max={60} value={blurAmount} onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setBlurAmount(+e.target.value)
+          }}></input>
+          <button className="Button ExitButton" onClick={()=>setShowControls(false)}>x</button>
+        </div>
       </div>}
     </div>
  

@@ -1,14 +1,16 @@
 .LiveStatus {
-    width: fit-content;
+    width: 100%;
+    max-width: 300px;
+}
+
+.LiveStatusWrapper {
+    
 }
 
 .OnlineClientVRepresentation {
     display: flex;
-    width: 100%;
     justify-content: space-between;
     place-items: center;
-
-
     backdrop-filter: blur(10px);
     background-color: hsla(0,0%,100%,.1);
     color: var(--text-color);
@@ -18,7 +20,7 @@
 }
 
 .Vous {
-    background-color: hsla(0,0%,100%,.3) !important;
+    background-color: hsla(0,0%,100%,.2) !important;
 }
 
 .Offline {
@@ -38,6 +40,7 @@
 .ClientRightSide {
     display: flex;
     align-items: center;
+    margin-left: 20px;
 }
 
 .ClientName {
@@ -46,6 +49,10 @@
     color: white;
     background-color: transparent;
     border: none;
+    outline: 0;
+
+    max-width: 70px;
+    min-width: 0;
 }
 
 .ClientName:focus {
@@ -56,6 +63,7 @@
 .ClientDuration {
     margin-right: 5px;
     font-size: 12px;
+    width: fit-content;
     font-family: 'Golos Text', sans-serif; 
     color: white;
 }
@@ -94,5 +102,34 @@
     }
     100% {
         opacity: 40%;
+    }
+}
+
+@media all and (max-width: 630px) {
+    .LiveStatusWrapper {
+        width: 100%;
+        bottom: 0;
+        left: 0;
+
+        display: flex;
+        justify-content: center;
+    }
+    .LiveStatus {
+        margin: 10px;
+        width: 100%;
+        padding: 0;
+    }
+    .ClientLeftSide {
+        margin-left: 5px;
+    }
+    .ClientRightSide {
+        margin-right: 5px;
+    }
+    .OnlineClientVRepresentation {
+        width: 100%;
+        /* padding: 2.5px 5px; */
+        padding: 2.5px 0px;
+        border-radius: 3px;
+        overflow: hidden;
     }
 }
