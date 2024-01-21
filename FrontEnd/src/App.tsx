@@ -1,9 +1,11 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import bänaudio from "./assets/Bän.wav";
-import "./App.css";
+import "./style/index.css";
 import useRedundantStorage from "./Hooks/useRedudantStorage";
 import LiveStatus from "./components/LiveStatus";
+import MusicDisplay from "./components/MusicDisplay";
+import {getVibrantColorFrom} from "./Hooks/getVibrantColor";
 
 interface AppProps {}
 
@@ -16,6 +18,7 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   const [blurAmount, setBlurAmount] = useRedundantStorage<number>("blur-amount", 10, true, "px");
   const [fontSize, setFontSize] = useRedundantStorage<number>("font-size", 5, true, "rem");
   const [showDeviceInfo, setShowDeviceInfo] = useRedundantStorage<string>("showDeviceInfo", "false");
+  const [autoColor, setAutoColor] = useRedundantStorage<string>("autoColor", "false");
   const [showControls, setShowControls] = useState<boolean>(false);
   const handle = useFullScreenHandle();
 
@@ -82,6 +85,10 @@ const App:React.FC<AppProps> = ():JSX.Element => {
     document.body.appendChild(ourAudio);
   }
 
+  function changeBackgroundToSpotify(url: string) {
+    setRandomURL(url)
+  }
+
   useEffect(() => {
     setInterval(updateTimerInterval, 1000);
 
@@ -93,6 +100,11 @@ const App:React.FC<AppProps> = ():JSX.Element => {
     return () => {};
   }, [])
 
+  useEffect(() => {
+    if (autoColor=="true") getVibrantColorFrom(randomURL, true).then(setColor)
+  }, [randomURL, autoColor, setColor])
+
+
   return <div className="Wrapper">
     
     <div className="Controls">
@@ -102,6 +114,7 @@ const App:React.FC<AppProps> = ():JSX.Element => {
           <button className={`Button GlowButton${glow=="true"?" ToggleActive": ""}`} onClick={() => OptionButtonClicked(() => setGlow(glow=="true"?"false":"true"))}>BRILLER</button>
           <button className="Button" onClick={() => OptionButtonClicked(handle.enter)}>PLEIN ÉCRAN</button>
           <button className={`Button${showDeviceInfo=="true"?" ToggleActive": ""}`} onClick={() => OptionButtonClicked(() => setShowDeviceInfo(showDeviceInfo=="true"?"false":"true"))}>APPAREILS</button>
+          <button className={`Button${autoColor=="true"?" ToggleActive": ""}`} onClick={() => OptionButtonClicked(() => setAutoColor(autoColor=="true"?"false":"true"))}>COULEUR AUTOMATIQUE</button>
         </div>
         <div className="row">
           <input className="Button ColorInput" type="color" onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -122,11 +135,14 @@ const App:React.FC<AppProps> = ():JSX.Element => {
  
 
     <FullScreen handle={handle}>
-      <div className="LiveStatusWrapper">
-        <LiveStatus showInfo={showDeviceInfo === "true"}></LiveStatus>
+      <LiveStatus showInfo={showDeviceInfo === "true"}></LiveStatus>
+      <div className="MusicDisplay">
+        <MusicDisplay changeBackground={changeBackgroundToSpotify} getRandomImage={getRandomImageURL}></MusicDisplay>
       </div>
       {randomURL && <div className="Background" style={{backgroundImage: `url("${randomURL}")`}}/>}
-      <div className="Content" onDoubleClick={() => getRandomImageURL()}>
+      <div className="Content" onDoubleClick={() => {
+        if (randomURL.startsWith("BackgroundImages/")) getRandomImageURL()
+        }}>
         <div className="Digit">
           <h2 className="Title">JOURS</h2>
           <h1 className={`Timer ${glow==="true" && "glow"}`} id="Days">{formatNumber(getTime().jours)}</h1>

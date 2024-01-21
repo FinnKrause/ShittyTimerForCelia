@@ -1,4 +1,4 @@
-import "../LiveStatus.css";
+import "../style/LiveStatus.css";
 import {useEffect, useRef, useState} from "react";
 import useRedundantStorage from "../Hooks/useRedudantStorage";
 import { OfflineClient, OnlineClient } from "./Interfaces";
@@ -25,7 +25,7 @@ const LiveStatus:React.FC<LiveStatusProps> = (Props):JSX.Element => {
           if (data.type === 'onlineClients') 
             setOnlineClients(data.data)
         else if (data.type === "offlineClients") {
-            console.log(data.data)
+            // console.log(data.data)
             setOfflineClients(data.data)
         }
         else if (data.type === "Identification") {
@@ -47,10 +47,13 @@ const LiveStatus:React.FC<LiveStatusProps> = (Props):JSX.Element => {
         ws.current!.send(JSON.stringify({type: "Update", data: {name: newName}}))
     }
        
-    return <div className="LiveStatus">
-        {Props.showInfo && onlineClients?.map((i, idx) => <OnlineClientVRepresentation myself={clientId === i.clientId} setDeviceName={updateName} deviceName={clientId === i.clientId ? deviceName : undefined} data={i} key={idx}></OnlineClientVRepresentation>)}
-        {Props.showInfo && offlineClients && offlineClients?.map((i, idx) => <OfflineClientVRepresentation data={i} key={idx}></OfflineClientVRepresentation>)}
+    if (Props.showInfo) return <div className="LiveStatusWrapper">
+      <div className="LiveStatus">
+          {onlineClients?.map((i, idx) => <OnlineClientVRepresentation myself={clientId === i.clientId} setDeviceName={updateName} deviceName={clientId === i.clientId ? deviceName : undefined} data={i} key={idx}></OnlineClientVRepresentation>)}
+          {offlineClients && offlineClients?.map((i, idx) => <OfflineClientVRepresentation data={i} key={idx}></OfflineClientVRepresentation>)}
+      </div>
     </div>
+    else return <></>
 }
 
 

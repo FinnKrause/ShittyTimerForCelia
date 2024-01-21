@@ -1,0 +1,73 @@
+.MusicDisplay {
+    position: absolute;
+    z-index: 4;
+
+    bottom: 10px;
+    right: 10px;
+
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.MusicLeft {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 15px;
+}
+
+.SongTitle {
+    color: var(--text-color);
+    font-family: 'Golos Text', sans-serif;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.SongArtist {
+    color: white;
+    font-family: 'Golos Text', sans-serif; 
+    font-size: 12px;
+    text-align: right;
+    margin-top: 5px;
+}
+
+.MusicRight {
+    position: relative;
+}
+
+.CoverImage {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    position: relative;
+    animation: rotate 20s infinite linear;
+}
+
+.paused {
+    animation-play-state: paused;
+}
+
+/* .BlackDot {
+    height: 20px;
+    width: 20px;
+    background-color: black;
+    border-radius: 50%;
+    position: absolute;
+    z-index: 6;
+    right: 20px;
+    bottom: 21.5px;
+} */
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media all and (max-width: 630px) {
+
+}
