@@ -1,4 +1,3 @@
-// import { WSRes, OnlineClient, OfflineClient } from "./Interfaces";
 import DeviceDetector from "device-detector-js";
 import fetch from "node-fetch";
 import { WebSocketServer } from "ws";
