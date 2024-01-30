@@ -28,7 +28,7 @@ const MusicDisplay:React.FC<MusicDisplayProps> = (Props):JSX.Element => {
     }
 
     useEffect(() => {
-        const interval = setInterval(updateData, 2000)
+        const interval = setInterval(updateData, 10000)
         return () => clearInterval(interval)
     }, [])
 

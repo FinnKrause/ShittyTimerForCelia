@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState, useRef } from "react";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import bänaudio from "./assets/Bän.wav";
 import "./style/index.css";
@@ -10,7 +10,7 @@ import {getVibrantColorFrom} from "./Hooks/getVibrantColor";
 interface AppProps {}
 
 const App:React.FC<AppProps> = ():JSX.Element => {
-  const dateToCountdown = new Date("Feb 25, 2024 16:50:00").getTime();
+  const dateToCountdown = new Date("Feb 29, 2024 16:50:00").getTime();
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [randomURL, setRandomURL] = useState<string>("");
   const [glow, setGlow] = useRedundantStorage<string>("glow", "false");
@@ -20,6 +20,7 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   const [showDeviceInfo, setShowDeviceInfo] = useRedundantStorage<string>("showDeviceInfo", "false");
   const [autoColor, setAutoColor] = useRedundantStorage<string>("autoColor", "false");
   const [showControls, setShowControls] = useState<boolean>(false);
+  const BänAlarmRef = useRef<HTMLButtonElement>(null);
   const handle = useFullScreenHandle();
 
   const getRandomImageURL = async () => {
@@ -61,17 +62,26 @@ const App:React.FC<AppProps> = ():JSX.Element => {
     const sec = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
     if (hour == 0 && min == 0 && sec == 0) {
-      console.log("BÄN ALARM")
-      let _counter = 0;
-      const _interval = setInterval(() => {
-        playSound();
-        if (_counter >= 10) clearInterval(_interval);
-        _counter++;
-      }, 300)
+      BänAlarm();
     }
     else if (min == 0 && sec == 0) {
       playSound();
     }
+  }
+
+  async function BänAlarm() {
+    if (BänAlarmRef.current?.classList.contains("ToggleActive")) return;
+    console.log("BÄN ALARM")
+    BänAlarmRef.current?.classList.toggle("ToggleActive");
+    let _counter = 0;
+    const _interval = setInterval(() => {
+      playSound();
+      if (_counter >= 10) {
+        clearInterval(_interval);
+        BänAlarmRef.current?.classList.toggle("ToggleActive");
+      }
+      _counter++;
+    }, 200)
   }
 
   function playSound() {
@@ -128,6 +138,7 @@ const App:React.FC<AppProps> = ():JSX.Element => {
           <input className="Slider" type="range" min={0} max={60} value={blurAmount} onChange={(e: ChangeEvent<HTMLInputElement>) => {
             setBlurAmount(+e.target.value)
           }}></input>
+          <button className="Button" ref={BänAlarmRef} onClick={BänAlarm}>BÄN ALARM</button>
           <button className="Button ExitButton" onClick={()=>setShowControls(false)}>x</button>
         </div>
       </div>}
