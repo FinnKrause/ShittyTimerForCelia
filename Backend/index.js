@@ -25,7 +25,7 @@ wss.on("connection", (ws, req) => {
   }, 30000);
 
   let country;
-  let customName;
+  let customName = userAgendString(deviceDetector.parse(userAgent));
   ws.send(
     reply("offlineClients", Array.from(clientHistory.values()), false, null)
   );
@@ -39,15 +39,13 @@ wss.on("connection", (ws, req) => {
     )
   );
 
-  logMessage(
-    `Client "${userAgendString(deviceDetector.parse(userAgent))}" connected.`
-  );
+  logMessage(`Client "${customName}" connected.`);
 
   currentClients.set(clientId, {
     connectedSince: startTime,
     country: country,
     clientId,
-    name: userAgendString(deviceDetector.parse(userAgent)),
+    name: customName,
   });
   broadcastOnlineClients();
 
@@ -59,16 +57,16 @@ wss.on("connection", (ws, req) => {
       old.country = data.data.country;
       country = data.data.country;
       if (data.data.name) {
+        logMessage(
+          `Renamed "${customName}" after initial identification to "${data.data.name}"`
+        );
         old.name = data.data.name;
         customName = data.data.name;
       }
       currentClients.set(clientId, old);
 
-      // if (clientHistory.has(data.data.country))
-      //   clientHistory.delete(data.data.country);
-
       logMessage(
-        `Client "${old.name}" location sucessfully updated to "${data.data.country}".`
+        `Client's "${customName}" location sucessfully updated to "${data.data.country}".`
       );
       broadcastOfflineClients();
       broadcastOnlineClients();

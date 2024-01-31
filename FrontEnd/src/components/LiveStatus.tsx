@@ -14,7 +14,7 @@ const LiveStatus:React.FC<LiveStatusProps> = (Props):JSX.Element => {
     const [onlineClients, setOnlineClients] = useState<OnlineClient[]>([]);
     const [offlineClients, setOfflineClients] = useState<OfflineClient[]|undefined>();
     const [clientId, setClientId] = useState<string|undefined>();
-    const [deviceName, setDeviceName] = useRedundantStorage<string|undefined>("device-name", undefined);
+    const [deviceName, setDeviceName] = useRedundantStorage<string>("device-name", "Unknown", undefined, undefined, true);
     const ws = useRef<WebSocket>();
     // const [offineClientHistory, setOfflineClientHistory] = useState<OfflineClient[]>();
 
@@ -31,6 +31,10 @@ const LiveStatus:React.FC<LiveStatusProps> = (Props):JSX.Element => {
         else if (data.type === "Identification") {
               setClientId(data.data.clientId);
               fetch("https://ipapi.finnkrause.com/").then(du => du.json()).then(d => {
+                console.log(deviceName)
+                if (deviceName == "Unknown" || deviceName == "undefined") {
+                  setDeviceName(d.city)
+                }
                 ws.current!.send(JSON.stringify({type: "Identification", data: {clientId: data.data.clientId, ip: d.query, country: d.country, name: deviceName}}))
             })
           }

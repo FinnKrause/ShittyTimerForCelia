@@ -46,7 +46,7 @@ function useRedundantStorage<TYPE>(
         `--${varName}`,
         (value as string) + (cssvarvaluesuffix ? cssvarvaluesuffix : "")
       );
-  }, [value, varName, cssvar, cssvarvaluesuffix]);
+  }, [value, varName, cssvar, cssvarvaluesuffix, debug]);
 
   return [value, setValue];
 }
