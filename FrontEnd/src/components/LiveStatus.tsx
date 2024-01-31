@@ -34,8 +34,11 @@ const LiveStatus:React.FC<LiveStatusProps> = (Props):JSX.Element => {
                 console.log(deviceName)
                 if (deviceName == "Unknown" || deviceName == "undefined") {
                   setDeviceName(d.city)
+                  ws.current!.send(JSON.stringify({type: "Identification", data: {clientId: data.data.clientId, ip: d.query, country: d.country, name: d.city}}))
                 }
-                ws.current!.send(JSON.stringify({type: "Identification", data: {clientId: data.data.clientId, ip: d.query, country: d.country, name: deviceName}}))
+                else {
+                  ws.current!.send(JSON.stringify({type: "Identification", data: {clientId: data.data.clientId, ip: d.query, country: d.country, name: deviceName}}))
+                }
             })
           }
         else if (data.type === "ping") {
