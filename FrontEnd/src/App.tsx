@@ -116,7 +116,6 @@ const App:React.FC<AppProps> = ():JSX.Element => {
 
 
   return <div className="Wrapper">
-    
     <div className="Controls">
       {!showControls && <button className="ShowControlsButton" onClick={() => setShowControls(true)}></button>}
       {showControls && <div className="ControlsRelative">
@@ -144,7 +143,6 @@ const App:React.FC<AppProps> = ():JSX.Element => {
       </div>}
     </div>
  
-
     <FullScreen handle={handle}>
       <LiveStatus showInfo={showDeviceInfo === "true"}></LiveStatus>
       <div className="MusicDisplay">
