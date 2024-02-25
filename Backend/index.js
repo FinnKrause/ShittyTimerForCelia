@@ -115,11 +115,11 @@ function broadcastOfflineClients() {
   wss.broadcast("offlineClients", Array.from(clientHistory.values()) || null);
 }
 
-function logMessage(message) {
+function logMessage(message, ...args) {
   var today = new Date();
   var date =
     today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  console.log(`[${date}] ${message}`);
+  console.log(`[${date}] ${message} ${args.toString()}`);
 }
 
 function reply(

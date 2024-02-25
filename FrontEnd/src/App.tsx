@@ -10,7 +10,7 @@ import {getVibrantColorFrom} from "./Hooks/getVibrantColor";
 interface AppProps {}
 
 const App:React.FC<AppProps> = ():JSX.Element => {
-  const dateToCountdown = new Date("Feb 29, 2024 16:50:00").getTime();
+  const dateToCountdown = new Date("Feb 29, 2024 18:52:00").getTime();
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [randomURL, setRandomURL] = useState<string>("");
   const [glow, setGlow] = useRedundantStorage<string>("glow", "false");

@@ -44,20 +44,29 @@ def handle_function(cmd):
             return {
                 "songTitle": None,
                 "songArtist": None,
+                "trackDuration": None,
+                "currentTrackProgress": None,
                 "image": None,
                 "isPlaying": None,
             }
 
         imageURL = cTrack["item"]["album"]["images"][0]["url"]
         artist = cTrack["item"]["album"]["artists"][0]["name"]
+        trackDuration = cTrack["item"]["duration_ms"]
+        currentTrackProgess = cTrack["progress_ms"]
         songTitle = cTrack["item"]["name"]
         isPlaying = cTrack["is_playing"]
+
+        print(currentTrackProgess)
+        print(trackDuration)
 
         relavantData = {
             "songTitle": songTitle,
             "songArtist": artist,
             "image": imageURL,
             "isPlaying": isPlaying,
+            "trackDuration": trackDuration,
+            "currentTrackProgress": currentTrackProgess,
         }
 
         # imageURL = cTrack["item"]["album"]["images"][0]["url"]
