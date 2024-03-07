@@ -21,6 +21,8 @@
     color: var(--text-color);
     font-family: 'Golos Text', sans-serif;
     font-weight: bold;
+    /* text-align: right;
+    width: 100%; */
     font-size: 15px;
 }
 
