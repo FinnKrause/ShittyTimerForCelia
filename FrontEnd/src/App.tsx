@@ -25,7 +25,7 @@ const App:React.FC<AppProps> = ():JSX.Element => {
 
   const getRandomImageURL = async () => {
     const images:{JPEG: number, JPG: number} = {
-      "JPEG": 27,
+      "JPEG": 42,
       "JPG": 36
     }
     const index = (new Date().getMinutes() % 2 == 0) ? "JPEG" : "JPG";
