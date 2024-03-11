@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../style/MusicDisplay.css";
+import CircularProgressbarbyLeopold from "./CircularProgressbarbyLeopold";
 
 
 interface MusicDisplayProps {
@@ -56,11 +57,13 @@ const MusicDisplay:React.FC<MusicDisplayProps> = (Props):JSX.Element => {
             <div className="ProgressBar"></div>
         </div>
         <div className="MusicRight">
-            <div className="ProgressDot" onClick={() => {
+            <div className="ProgressBar" onClick={() => {
                 if (coverAsBG) Props.getRandomImage();
                 setCoverAsBG(!coverAsBG)
-            }}
-             style={{height: 100-Math.round((songData.currentTrackProgress/songData.trackDuration)*100)+"%"}}></div>
+            }}>
+                <CircularProgressbarbyLeopold progress={(songData.currentTrackProgress/songData.trackDuration)}>
+                </CircularProgressbarbyLeopold>
+            </div>
             <img className={`CoverImage${!songData.isPlaying?" paused":""}`} onClick={() => {
                 if (coverAsBG) Props.getRandomImage();
                 setCoverAsBG(!coverAsBG)

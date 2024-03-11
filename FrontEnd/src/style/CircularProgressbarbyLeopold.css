@@ -1,0 +1,29 @@
+.ProgressBar {
+    position: absolute;
+
+    display: flex;
+    justify-content: center;
+    place-items: center;
+
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+
+    z-index: 7;
+}
+
+.skill{
+    position: relative;
+    transform: rotate(-90deg);
+    top: 0;
+    left: 0;
+}
+
+#circle {
+    fill: none;
+    stroke: url(#GradientColor);
+    stroke-width: 5px;
+    stroke-dasharray: 200;
+    transition: all 2s linear;
+}
