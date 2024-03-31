@@ -56,6 +56,7 @@ const App:React.FC<AppProps> = ():JSX.Element => {
 
   const updateTimerInterval = () => {
     const timeLeft = dateToCountdown - new Date().getTime();
+
     setTimeLeft(timeLeft);
 
     const hour = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
@@ -101,7 +102,8 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   }
 
   useEffect(() => {
-    setInterval(updateTimerInterval, 1000);
+    const timeLeft = dateToCountdown - new Date().getTime();
+    if (timeLeft > 0) setInterval(updateTimerInterval, 1000);
 
     getRandomImageURL();
     setInterval(() => {
