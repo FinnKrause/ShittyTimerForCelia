@@ -41,7 +41,8 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   }
 
   const formatNumber = (num: number):string => {
-    if (num <= 9) return "0"+num;
+    if (num < 0) return "00";
+    else if (num <= 9) return "0"+num;
     else return num.toString();
   }
 
@@ -55,10 +56,9 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   }
 
   const updateTimerInterval = () => {
-    const timeLeft = dateToCountdown - new Date().getTime();
-
+    const timeLeft =dateToCountdown - new Date().getTime();
     setTimeLeft(timeLeft);
-
+  
     const hour = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
     const min = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
     const sec = Math.floor((timeLeft % (1000 * 60)) / 1000);
@@ -102,8 +102,7 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   }
 
   useEffect(() => {
-    const timeLeft = dateToCountdown - new Date().getTime();
-    if (timeLeft > 0) setInterval(updateTimerInterval, 1000);
+    setInterval(updateTimerInterval, 1000);
 
     getRandomImageURL();
     setInterval(() => {
