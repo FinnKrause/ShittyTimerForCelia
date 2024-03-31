@@ -6,7 +6,7 @@ import useRedundantStorage from "./Hooks/useRedudantStorage";
 import LiveStatus from "./components/LiveStatus";
 import MusicDisplay from "./components/MusicDisplay";
 import {getVibrantColorFrom} from "./Hooks/getVibrantColor";
-import Graph from "./components/Graph";
+// import Graph from "./components/Graph";
 
 interface AppProps {}
 
@@ -146,7 +146,7 @@ const App:React.FC<AppProps> = ():JSX.Element => {
       </div>}
     </div>
 
-    <Graph></Graph>
+    {/* <Graph></Graph> */}
  
     <FullScreen handle={handle}>
       <LiveStatus showInfo={showDeviceInfo === "true"}></LiveStatus>
