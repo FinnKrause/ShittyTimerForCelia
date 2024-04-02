@@ -107,7 +107,7 @@ html {
 }
 
 .ColorInput {
-  padding: 5px;
+  /* padding: 5px; */
 }
 
 .Timer {
@@ -172,6 +172,12 @@ html {
 
 .Slider[type=range]:focus {
   outline: none;
+}
+
+.DatePicker {
+  border-radius: 5px;
+  border: none;
+  width: 15px;
 }
 
 @media all and (max-width: 630px) {

@@ -11,7 +11,7 @@ import {getVibrantColorFrom} from "./Hooks/getVibrantColor";
 interface AppProps {}
 
 const App:React.FC<AppProps> = ():JSX.Element => {
-  const dateToCountdown = new Date("Mar 28, 2024 21:55:00").getTime();
+  const [dateToCountdown] = useState<number>(new Date("Apr 10, 2024 21:55:00").getTime());
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [randomURL, setRandomURL] = useState<string>("");
   const [glow, setGlow] = useRedundantStorage<string>("glow", "false");
@@ -56,7 +56,7 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   }
 
   const updateTimerInterval = () => {
-    const timeLeft =dateToCountdown - new Date().getTime();
+    const timeLeft = dateToCountdown - new Date().getTime();
     setTimeLeft(timeLeft);
   
     const hour = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
@@ -102,14 +102,16 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   }
 
   useEffect(() => {
-    setInterval(updateTimerInterval, 1000);
+    const TimerInterval = setInterval(updateTimerInterval, 1000);
 
     getRandomImageURL();
     setInterval(() => {
       getRandomImageURL();
     }, 1000*60*60);
 
-    return () => {};
+    return () => {
+      clearInterval(TimerInterval)
+    };
   }, [])
 
   useEffect(() => {
@@ -138,6 +140,11 @@ const App:React.FC<AppProps> = ():JSX.Element => {
           }}></input>
           <input className="Slider" type="range" min={0} max={60} value={blurAmount} onChange={(e: ChangeEvent<HTMLInputElement>) => {
             setBlurAmount(+e.target.value)
+          }}></input>
+          <input className="Button DatePicker" type="datetime-local" onChange={e => {
+            const newDate = new Date(e.target.value).getTime()
+            // setDateToCountdown(newDate)
+            console.log(newDate)
           }}></input>
           <button className="Button" ref={BänAlarmRef} onClick={BänAlarm}>BÄN ALARM</button>
           <button className="Button ExitButton" onClick={()=>setShowControls(false)}>x</button>
