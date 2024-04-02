@@ -1,9 +1,12 @@
 const express = require("express");
 const app = express();
 const axios = require("axios");
+const { readFileSync, writeFileSync } = require("fs");
+
+const localStorageOfTimeToCountDown = initialLocalSet();
 
 app.use(express.static("public"));
-app.use((req, res, next) => {
+app.use((_, res, next) => {
   res.append("Access-Control-Allow-Origin", ["*"]);
   next();
 });
@@ -18,4 +21,45 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/getDateToCountdown", (req, res) => {
+  res.json({
+    date: localStorageOfTimeToCountDown,
+  });
+});
+
+app.post("/setNewDateToCountdown", (req, res) => {
+  const newDate = req.data.date;
+  if (!newDate || !typeof newDate === "number") {
+    res.json({ error: "No valid date specified" });
+    return;
+  }
+  localStorageOfTimeToCountDown = newDate;
+  writeLocalVarToStorage(newDate);
+});
+
 app.listen(6972, console.log("IP-API Running on port 6972"));
+
+function initialLocalSet() {
+  try {
+    readData = readFileSync("./additionalData.json", "utf-8");
+    readDataJSON = JSON.parse(readData);
+    if (typeof readDataJSON["date"] === "number") return readDataJSON["date"];
+    else return 440;
+  } catch (e) {
+    console.log(
+      "Error when reading JSON file with date to count down to: " +
+        JSON.stringify(e)
+    );
+  }
+}
+
+function writeLocalVarToStorage(number) {
+  try {
+    writeFileSync(
+      "./additionalData.json",
+      JSON.stringify({ date: localStorageOfTimeToCountDown }, null, 2)
+    );
+  } catch (e) {
+    console.log("Error when saving new Date to disk: " + JSON.stringify(e));
+  }
+}
