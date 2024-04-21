@@ -3,13 +3,15 @@ const app = express();
 const axios = require("axios");
 const { readFileSync, writeFileSync } = require("fs");
 
-const localStorageOfTimeToCountDown = initialLocalSet();
+var localStorageOfTimeToCountDown = initialLocalSet();
 
 app.use(express.static("public"));
 app.use((_, res, next) => {
   res.append("Access-Control-Allow-Origin", ["*"]);
+  res.append("Access-Control-Allow-Headers", "*");
   next();
 });
+app.use(express.json());
 
 app.get("/", (req, res) => {
   const ips = req.headers["x-real-ip"]
@@ -28,13 +30,15 @@ app.get("/getDateToCountdown", (req, res) => {
 });
 
 app.post("/setNewDateToCountdown", (req, res) => {
-  const newDate = req.data.date;
+  let newDate = req.body.date;
   if (!newDate || !typeof newDate === "number") {
     res.json({ error: "No valid date specified" });
     return;
   }
   localStorageOfTimeToCountDown = newDate;
   writeLocalVarToStorage(newDate);
+  console.log("Date updated to: " + new Date(newDate).toString());
+  res.json({ error: false, message: "Date updated!", data: { date: newDate } });
 });
 
 app.listen(6972, console.log("IP-API Running on port 6972"));

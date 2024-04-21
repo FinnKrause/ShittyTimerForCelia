@@ -6,12 +6,13 @@ import useRedundantStorage from "./Hooks/useRedudantStorage";
 import LiveStatus from "./components/LiveStatus";
 import MusicDisplay from "./components/MusicDisplay";
 import {getVibrantColorFrom} from "./Hooks/getVibrantColor";
+import axios from "axios";
 // import Graph from "./components/Graph";
 
 interface AppProps {}
 
 const App:React.FC<AppProps> = ():JSX.Element => {
-  const [dateToCountdown] = useState<number>(new Date("Apr 10, 2024 21:55:00").getTime());
+  const [dateToCountdown, setDateToCountdown] = useState<number>(0);
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [randomURL, setRandomURL] = useState<string>("");
   const [glow, setGlow] = useRedundantStorage<string>("glow", "false");
@@ -86,6 +87,13 @@ const App:React.FC<AppProps> = ():JSX.Element => {
     }, 200)
   }
 
+  function getCurrentTimerInformationFromServer() {
+    axios.get("https://celiaapi.finnkrause.com/getDateToCountdown").then(res => {
+      console.log("Got this date: " + res.data.date)
+      setDateToCountdown(res.data.date)
+    })
+  }
+
   function playSound() {
     const ourAudio = document.createElement('audio'); 
     ourAudio.style.display = "none"; 
@@ -102,17 +110,25 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   }
 
   useEffect(() => {
-    const TimerInterval = setInterval(updateTimerInterval, 1000);
+    getCurrentTimerInformationFromServer();
 
     getRandomImageURL();
-    setInterval(() => {
+    const ImageInterval = setInterval(() => {
       getRandomImageURL();
     }, 1000*60*60);
 
     return () => {
-      clearInterval(TimerInterval)
+      clearInterval(ImageInterval)
     };
   }, [])
+
+  useEffect(() => {
+    const TimerInterval = setInterval(updateTimerInterval, 1000);
+    
+    return () => {
+      clearInterval(TimerInterval)
+    }
+  }, [dateToCountdown])
 
   useEffect(() => {
     if (autoColor=="true") getVibrantColorFrom(randomURL, true).then(setColor)
@@ -144,7 +160,13 @@ const App:React.FC<AppProps> = ():JSX.Element => {
           <input className="Button DatePicker" type="datetime-local" onChange={e => {
             const newDate = new Date(e.target.value).getTime()
             // setDateToCountdown(newDate)
-            console.log(newDate)
+            const body2 = {date: newDate}
+            axios.post("https://celiaapi.finnkrause.com/setNewDateToCountdown", body2).then(res => {
+              if (res.data.error == false) {
+                setDateToCountdown(newDate);
+                console.log("Date updated!")
+              }
+            })
           }}></input>
           <button className="Button" ref={BänAlarmRef} onClick={BänAlarm}>BÄN ALARM</button>
           <button className="Button ExitButton" onClick={()=>setShowControls(false)}>x</button>
