@@ -88,7 +88,7 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   }
 
   function getCurrentTimerInformationFromServer() {
-    axios.get("https://celiaapi.finnkrause.com/getDateToCountdown").then(res => {
+    axios.get("https://ipapi.finnkrause.com/getDateToCountdown").then(res => {
       console.log("Got this date: " + res.data.date)
       setDateToCountdown(res.data.date)
     })
@@ -161,7 +161,7 @@ const App:React.FC<AppProps> = ():JSX.Element => {
             const newDate = new Date(e.target.value).getTime()
             // setDateToCountdown(newDate)
             const body2 = {date: newDate}
-            axios.post("https://celiaapi.finnkrause.com/setNewDateToCountdown", body2).then(res => {
+            axios.post("https://ipapi.finnkrause.com/setNewDateToCountdown", body2).then(res => {
               if (res.data.error == false) {
                 setDateToCountdown(newDate);
                 console.log("Date updated!")
