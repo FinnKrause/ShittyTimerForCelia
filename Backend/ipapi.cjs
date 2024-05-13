@@ -29,6 +29,21 @@ app.get("/getDateToCountdown", (req, res) => {
   });
 });
 
+app.get("/getDaysLeft", async (req, res) => {
+  const timeleft = localStorageOfTimeToCountDown - new Date().getTime();
+
+  let days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+  const hour = Math.floor(
+    (timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  );
+  if (hour > 12) days++;
+  console.log(days);
+
+  res.json({
+    date: days,
+  });
+});
+
 app.post("/setNewDateToCountdown", (req, res) => {
   let newDate = req.body.date;
   if (!newDate || !typeof newDate === "number") {
