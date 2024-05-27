@@ -26,11 +26,13 @@ const App:React.FC<AppProps> = ():JSX.Element => {
   const handle = useFullScreenHandle();
 
   const getRandomImageURL = async () => {
-    const images:{JPEG: number, JPG: number} = {
-      "JPEG": 42,
-      "JPG": 36
+    const images:{JPEG: number, JPG: number, png: number} = {
+      "JPEG": 50,
+      "JPG": 40,
+      "png": 9
     }
-    const index = (new Date().getMinutes() % 2 == 0) ? "JPEG" : "JPG";
+    const rnd = Math.random()
+    const index = (rnd <= 0.4) ? ("JPEG") : ((rnd > 0.8) ? "png" : "JPG");
 
     const url = "BackgroundImages/Image (" + Math.floor(Math.random() * images[index] + 1) + ")." + index;
     setRandomURL(url);
