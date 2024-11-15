@@ -56,6 +56,10 @@ wss.on("connection", (ws, req) => {
       let old = { ...currentClients.get(clientId) };
       old.country = data.data.country;
       country = data.data.country;
+      if (data.data.city === "Mannheim") {
+        old.country = "France";
+        country = "France";
+      }
       if (data.data.name) {
         logMessage(
           `Renamed "${customName}" after initial identification to "${data.data.name}"`
